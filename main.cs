@@ -13,15 +13,17 @@ namespace TimesTable
             while (true)
             {
                 int size = 10;
+                int[] ship_nums = new int[4];
                 string[,] display = new string[10, 10];
                 string[,] enemies = new string[10, 10];
 
                 Grid_Size(ref size, ref display, ref enemies);
                 Display(size, display);
-                Place_Enemies(size, enemies);
+                Select_Ships(size, ref ship_nums);
+                //Place_Enemies(size, enemies);
 
 
-                Console.ReadLine();
+                //Console.ReadLine();
             }
         }
 
@@ -40,7 +42,7 @@ namespace TimesTable
             display = _display;
             enemies = _display;
         }
-
+        //set grid size
         static void Display(int size, string[,] display)
         {
             for (int x = 0; x < size; x++)
@@ -53,12 +55,12 @@ namespace TimesTable
                 Console.WriteLine();
             }
         }
-
+        //display grid
         static void Place_Enemies(int size, string[,] enemies)
         {
             Boolean shipplaced = false;
             while (shipplaced == false)
-                {
+            {
                 int[,] ship = new int[4, 2];
 
                 Random rnd = new Random();
@@ -79,14 +81,14 @@ namespace TimesTable
                     {
                         case 1:
 
-                            
 
-                            for(int i = 1; i < shiplength; i++)
+
+                            for (int i = 1; i < shiplength; i++)
                             {
                                 y_2 = y_1 - i;
                                 ship[i, 0] = x_1;
                                 ship[i, 1] = y_2;
-                                          
+
                             }
 
                             break;
@@ -102,10 +104,86 @@ namespace TimesTable
                         case 4:
 
                             break;
+                    }
                 }
+
+                Console.ReadLine();
+            }
+            {
+            Boolean shipplaced = false;
+            while (shipplaced == false)
+                {
+
+                Random rnd = new Random();
+                int x_1 = rnd.Next(size);
+                int y_1 = rnd.Next(size);
+
+                if (enemies[y_1, x_1] == " -")
+                {
+                    int dir = rnd.Next(1, 5);
+
+                    if (dir == 1)
+                    {
+                        int y_2 = y_1 - 1;
+                        if (y_2 >= 0)
+                        {
+                            if (enemies[y_2, x_1] == " -")
+                            {
+                                enemies[y_2, x_1] = " #";
+                                enemies[y_1, x_1] = " #";
+                                shipplaced = true;
+                            }
+                        }
+
+
+                    }
+                    else if (dir == 2)
+                    {
+
+                    }
+                    else if (dir == 3)
+                    {
+
+                    }
+                    else if (dir == 4)
+                    {
+
+                    }
+                }
+
             }
 
             Console.ReadLine();
+
+
         }
+        //place enemies
+        static void Attack()
+        {
+            
+        }
+        //attack
+        static void Select_Ships(int size, ref int[] ship_nums)
+        {
+            Boolean exit = false;
+            double ships = Math.Ceiling(((double)size / 5) * 3);
+
+            while (exit == false)
+            {
+                for (int i = 2; i < 6; i++)
+                {
+                    //Console.Clear();
+                    Console.WriteLine("Ships left - " + ships);
+                    Console.Write(i + " long - ");
+                    ship_nums[i - 2] = Convert.ToInt32(Console.ReadLine());
+                    ships = ships - ship_nums[i - 2];
+                    for (int a = 0; a < 3; a++)
+                    {
+                        Console.WriteLine(ship_nums[a]);
+                    }
+                }
+            }
+        }
+        //select ships
     }
 }
