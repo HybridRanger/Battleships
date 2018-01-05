@@ -59,42 +59,49 @@ namespace TimesTable
             Boolean shipplaced = false;
             while (shipplaced == false)
                 {
+                int[,] ship = new int[4, 2];
 
                 Random rnd = new Random();
                 int x_1 = rnd.Next(size);
                 int y_1 = rnd.Next(size);
+                int y_2;
+                int shiplength;
 
                 if (enemies[y_1, x_1] == " -")
                 {
+
+                    ship[0, 0] = x_1;
+                    ship[0, 1] = y_1;
                     int dir = rnd.Next(1, 5);
 
-                    if (dir == 1)
+
+                    switch (dir)
                     {
-                        int y_2 = y_1 - 1;
-                        if (y_2 >= 0)
-                        {
-                            if (enemies[y_2, x_1] == " -")
+                        case 1:
+
+                            
+
+                            for(int i = 1; i < shiplength; i++)
                             {
-                                enemies[y_2, x_1] = " #";
-                                enemies[y_1, x_1] = " #";
-                                shipplaced = true;
+                                y_2 = y_1 - i;
+                                ship[i, 0] = x_1;
+                                ship[i, 1] = y_2;
+                                          
                             }
-                        }
 
+                            break;
 
-                    }
-                    else if (dir == 2)
-                    {
+                        case 2:
 
-                    }
-                    else if (dir == 3)
-                    {
+                            break;
 
-                    }
-                    else if (dir == 4)
-                    {
+                        case 3:
 
-                    }
+                            break;
+
+                        case 4:
+
+                            break;
                 }
             }
 
