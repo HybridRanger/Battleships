@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimesTable
+namespace Battleships
 {
     class Program
     {
@@ -71,7 +71,7 @@ namespace TimesTable
             }
         }
 
-        static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
+                static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
         {
             size = Convert.ToInt32(Console.ReadLine());
             string[,] _display = new string[size, size];
@@ -94,7 +94,7 @@ namespace TimesTable
 
                 for (int y = 0; y < size; y++)
                 {
-                    Console.Write(display[y,x]);
+                    Console.Write(display[y, x]);
                 }
                 Console.WriteLine();
             }
@@ -102,109 +102,59 @@ namespace TimesTable
         //display grid
         static void Place_Enemies(int size, string[,] enemies)
         {
-            Boolean shipplaced = false;
-            while (shipplaced == false)
+            
+
+            for (int length = 2; length <= 5; length++)
             {
-                int[,] ship = new int[4, 2];
+                int[,] temp = new int[2, 5];
+                Boolean ship_placed = false;
 
-                Random rnd = new Random();
-                int x_1 = rnd.Next(size);
-                int y_1 = rnd.Next(size);
-                int y_2;
-                int shiplength;
-
-                if (enemies[y_1, x_1] == " -")
+                while (ship_placed == false)
                 {
-
-                    ship[0, 0] = x_1;
-                    ship[0, 1] = y_1;
-                    int dir = rnd.Next(1, 5);
-
-
+                    Random rnd = new Random();
+                    temp[0,0] = rnd.Next(size);
+                    temp[1,0] = rnd.Next(size);
+                    int dir = rnd.Next(1,5);
                     switch (dir)
-                    {
+                        {
                         case 1:
-
-
-
-                            for (int i = 1; i < shiplength; i++)
+                            for (int i = 1; i <= length; i++)
                             {
-                                y_2 = y_1 - i;
-                                ship[i, 0] = x_1;
-                                ship[i, 1] = y_2;
+                                //calc coords
+                                if (enemies[temp[0,i-1],temp[1,i-1]] != "#" && temp[0,i-1]<= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
+                                {
+                                    if (i == length)
+                                    {
+                                        ship_placed = true;
+                                    }
+                                }
 
                             }
-
                             break;
-
                         case 2:
 
                             break;
-
                         case 3:
 
                             break;
-
                         case 4:
 
                             break;
-                    }
-                }
-
-                Console.ReadLine();
-            }
-            {
-            Boolean shipplaced = false;
-            while (shipplaced == false)
-                {
-
-                Random rnd = new Random();
-                int x_1 = rnd.Next(size);
-                int y_1 = rnd.Next(size);
-
-                if (enemies[y_1, x_1] == " -")
-                {
-                    int dir = rnd.Next(1, 5);
-
-                    if (dir == 1)
-                    {
-                        int y_2 = y_1 - 1;
-                        if (y_2 >= 0)
-                        {
-                            if (enemies[y_2, x_1] == " -")
-                            {
-                                enemies[y_2, x_1] = " #";
-                                enemies[y_1, x_1] = " #";
-                                shipplaced = true;
-                            }
                         }
 
 
-                    }
-                    else if (dir == 2)
-                    {
-
-                    }
-                    else if (dir == 3)
-                    {
-
-                    }
-                    else if (dir == 4)
-                    {
-
-                    }
                 }
 
             }
-
-            Console.ReadLine();
-
-
         }
         //place enemies
+        static void Enemy_Coords(ref int length, Boolean ship_placed, int[,] temp)
+        {
+
+        }
         static void Attack()
         {
-            
+
         }
         //attack
         static void Select_Ships(int size, ref int[] ship_nums)
@@ -229,5 +179,4 @@ namespace TimesTable
             }
         }
         //select ships
-    }
-}
+        }
