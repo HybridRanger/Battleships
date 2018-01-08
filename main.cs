@@ -10,6 +10,50 @@ namespace TimesTable
     {
         static void Main(string[] args)
         {
+            int choice;
+            Boolean correct = false;
+
+            while (correct == false)
+                {        
+                Console.WriteLine("Main Menu:");
+                Console.WriteLine("1. Guessing Practice");
+                Console.WriteLine("2. Player vs AI");
+                Console.WriteLine("3. 2 Player");
+                Console.WriteLine("4. Settings");
+                Console.WriteLine("5. Quit");
+
+                choice = Convert.ToInt32(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        //goto guessing practice
+                        correct = true;
+                        break;
+                    case 2:
+                        Console.Clear();
+                        //goto player vs AI
+                        correct = true;
+                        break;
+                    case 3:
+                        Console.Clear();
+                        //goto 2 player
+                        correct = true;
+                        break;
+                    case 4:
+                        Console.Clear();
+                        //goto settings
+                        correct = true;
+                        break;
+                    case 5:
+                        Console.Clear();
+                        //quit
+                        System.Environment.Exit(0);
+                        break;
+
+                }
+                }
             while (true)
             {
                 int size = 10;
