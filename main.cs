@@ -11,10 +11,11 @@ namespace Battleships
         static void Main(string[] args)
         {
             int choice;
+
             Boolean correct = false;
 
             while (correct == false)
-                {        
+            {
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("1. Guessing Practice");
                 Console.WriteLine("2. Player vs AI");
@@ -53,25 +54,37 @@ namespace Battleships
                         break;
 
                 }
-                }
+            }
             while (true)
             {
                 int size = 10;
                 int[] ship_nums = new int[4];
+                ship_nums[0] = 1;
+                ship_nums[1] = 2;
+                ship_nums[2] = 1;
+                ship_nums[3] = 1;
                 string[,] display = new string[10, 10];
                 string[,] enemies = new string[10, 10];
 
                 Grid_Size(ref size, ref display, ref enemies);
-                Display(size, display);
-                Select_Ships(size, ref ship_nums);
-                //Place_Enemies(size, enemies);
+                //Display(size, display);
+                //Select_Ships(size, ref ship_nums);
+                Place_Enemies(size, enemies, ship_nums);
+                for (int x = 0; x < size; x++)
+                {
 
+                    for (int y = 0; y < size; y++)
+                    {
+                        Console.Write(enemies[y, x]);
+                    }
+                    Console.WriteLine();
+                }
 
                 //Console.ReadLine();
             }
         }
 
-                static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
+        static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
         {
             size = Convert.ToInt32(Console.ReadLine());
             string[,] _display = new string[size, size];
@@ -100,51 +113,141 @@ namespace Battleships
             }
         }
         //display grid
-        static void Place_Enemies(int size, string[,] enemies)
+        static void Place_Enemies(int size, string[,] enemies, int[] ship_nums)
         {
-            
+
 
             for (int length = 2; length <= 5; length++)
             {
-                int[,] temp = new int[2, 5];
-                Boolean ship_placed = false;
-
-                while (ship_placed == false)
+                for (int a = 1; a <= ship_nums[length-2]; a++)
                 {
-                    Random rnd = new Random();
-                    temp[0,0] = rnd.Next(size);
-                    temp[1,0] = rnd.Next(size);
-                    int dir = rnd.Next(1,5);
-                    switch (dir)
+                    
+                    int[,] temp = new int[2, 5];
+                    Boolean ship_placed = false;
+
+                    while (ship_placed == false)
+                    {
+                        Random rnd = new Random();
+                        temp[0, 0] = rnd.Next(size);
+                        temp[1, 0] = rnd.Next(size);
+                        int dir = rnd.Next(1, 5);
+                        switch (dir)
                         {
-                        case 1:
-                            for (int i = 1; i <= length; i++)
-                            {
-                                //calc coords
-                                if (enemies[temp[0,i-1],temp[1,i-1]] != "#" && temp[0,i-1]<= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
+                            case 1:
+                                for (int i = 1; i <= length-1; i++)
                                 {
-                                    if (i == length)
+                                    Console.WriteLine("-" + temp[1, i - 1] + ", " + temp[0, i - 1]);
+                                    if (enemies[temp[1, i - 1], temp[0, i - 1]] != " #" || temp[0, i - 1] <= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
                                     {
-                                        ship_placed = true;
+                                        temp[1, i] = temp[1, 0];
+                                        temp[0, i] = temp[0, 0] + i;
+                                        if (i == length-1)
+                                        {
+                                            ship_placed = true;
+                                            Console.WriteLine(length);
+                                            for (int b = 0; b <= length-1; b++)
+                                            {
+
+                                                Console.WriteLine(temp[1, b] + ", " + temp[0, b]);
+                                                enemies[temp[1, b]-1, temp[0, b]-1] = " #";
+                                            }
+                                            Console.ReadLine();
+                                        }
+                                    } else
+                                    {
+                                        i = length;
+                                        
                                     }
+
                                 }
+                                break;
+                            case 2:
+                                for (int i = 1; i <= length - 1; i++)
+                                {
+                                    Console.WriteLine("-" + temp[1, i - 1] + ", " + temp[0, i - 1]);
+                                    if (enemies[temp[1, i - 1], temp[0, i - 1]] != " #" || temp[0, i - 1] <= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
+                                    {
+                                        
+                                        temp[1, i] = temp[1, 0] + i;
+                                        temp[0, i] = temp[0, 0];
+                                        if (i == length-1)
+                                        {
+                                            ship_placed = true;
+                                            Console.WriteLine(length);
+                                            for (int b = 0; b <= length-1; b++)
+                                            {
+                                                Console.WriteLine(temp[1,b] + ", " + temp[0,b]);
+                                                enemies[temp[1, b]-1, temp[0, b]-1] = " #";
+                                            }
+                                            Console.ReadLine();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        i = length;
+                                    }
 
-                            }
-                            break;
-                        case 2:
+                                }
+                                break;
+                            case 3:
+                                for (int i = 1; i <= length - 1; i++)
+                                {
+                                    Console.WriteLine("-" + temp[1, i - 1] + ", " + temp[0, i - 1]);
+                                    if (enemies[temp[1, i - 1], temp[0, i - 1]] != " #" || temp[0, i - 1] <= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
+                                    {
+                                        temp[1, i] = temp[1, 0];
+                                        temp[0, i] = temp[0, 0] - i;
+                                        if (i == length-1)
+                                        {
+                                            ship_placed = true;
+                                            Console.WriteLine(length);
+                                            for (int b = 0; b <= length-1; b++)
+                                            {
+                                                Console.WriteLine(temp[1, b] + ", " + temp[0, b]);
+                                                enemies[temp[1, b]-1, temp[0, b]-1] = " #";
+                                            }
+                                            Console.ReadLine();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        i = length;
+                                    }
 
-                            break;
-                        case 3:
+                                }
+                                break;
+                            case 4:
+                                for (int i = 1; i <= length - 1; i++)
+                                {
+                                    Console.WriteLine("-" + temp[1, i - 1] + ", " + temp[0, i - 1]);
+                                    if (enemies[temp[1, i - 1], temp[0, i - 1]] != " #" || temp[0, i - 1] <= size && temp[0, i - 1] >= 0 && temp[1, i - 1] <= size && temp[1, i - 1] >= 0)
+                                    {
+                                        temp[1, i] = temp[1, 0] - i;
+                                        temp[0, i] = temp[0, 0];
+                                        if (i == length-1)
+                                        {
+                                            ship_placed = true;
+                                            Console.WriteLine(length);
+                                            for (int b = 0; b <= length-1; b++)
+                                            {
+                                                Console.WriteLine(temp[1, b] + ", " + temp[0, b]);
+                                                enemies[temp[1, b]-1, temp[0, b]-1] = " #";
+                                            }
+                                            Console.ReadLine();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        i = length;
+                                    }
 
-                            break;
-                        case 4:
-
-                            break;
+                                }
+                                break;
                         }
 
 
+                    }
                 }
-
             }
         }
         //place enemies
@@ -179,4 +282,5 @@ namespace Battleships
             }
         }
         //select ships
-        }
+    }
+}
