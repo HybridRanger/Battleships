@@ -14,7 +14,7 @@ namespace Battleships
             //dev
             while (true)
             {
-                
+
                 int size = 10;
                 int[] ship_nums = new int[4];
                 ship_nums[0] = 1;
@@ -25,14 +25,15 @@ namespace Battleships
                 string[,] enemies = new string[10, 10];
 
                 Grid_Size(ref size, ref display, ref enemies);
-                Display(size, display);
+                
                 //Select_Ships(size, ref ship_nums);
-                //Place_Enemies(size, enemies, ship_nums);
-
+                Place_Enemies(size, enemies, ship_nums);
+                Display(size, display);
+                Attack(size);
                 Console.ReadLine();
             }
             //dev
-            
+
 
             while (true)
             {
@@ -96,7 +97,7 @@ namespace Battleships
 
 
             Console.Write("  ");
-            for (int i = 0; i <=size-1; i++)
+            for (int i = 0; i <= size - 1; i++)
             {
                 const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -107,16 +108,17 @@ namespace Battleships
 
                 value += letters[i % letters.Length];
 
-                    Console.Write(" " + value);
+                Console.Write(" " + value);
 
             }
             Console.WriteLine();
             for (int x = 0; x < size; x++)
             {
-                if ((x+1) < 10)
+                if ((x + 1) < 10)
                 {
                     Console.Write(" " + (x + 1));
-                } else
+                }
+                else
                 {
                     Console.Write(x + 1);
                 }
@@ -199,12 +201,20 @@ namespace Battleships
         }
         //place enemies
 
-        static void Attack()
+        static void Attack(int size)
         {
             Console.WriteLine("Enter coordinate (e.g. 3E)");
             Console.WriteLine();
             string coord = Console.ReadLine();
-
+            int y = coord[0];
+            int x = (int)coord[1] % 32;
+            if ((x>0 && x < size) && (y>0 && y<size))
+            {
+                Console.WriteLine("test");
+            } else
+            {
+                Console.WriteLine("Invalid Coordinte");
+            }
         }
         //attack
 
