@@ -36,7 +36,7 @@ namespace Battleships
 
 
             while (true)
-            {
+            {           //this is the main menu that allows the user to select the different types of games
                 int choice;
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("1. Guessing Practice");
@@ -51,23 +51,23 @@ namespace Battleships
                 {
                     case 1:
                         Console.Clear();
-                        //goto guessing practice
+                        //goto guessing practice        //when the user selects the first option, the guessing practice subroutine will be called
                         break;
                     case 2:
                         Console.Clear();
-                        //goto player vs AI
+                        //goto player vs AI     //when the user selects the second option, the PLayer vs AI subroutine will be called
                         break;
                     case 3:
                         Console.Clear();
-                        //goto 2 player
+                        //goto 2 player     //when the user selects the third option, the 2 player subroutine will be called
                         break;
                     case 4:
                         Console.Clear();
-                        //goto settings
+                        //goto settings     //when the user selects the fourth option, the setting subroutine will be called, which will allow the user to change the parameters of the game
                         break;
                     case 5:
                         Console.Clear();
-                        //quit
+                        //quit          //the fifth option will instantly quit the program
                         System.Environment.Exit(0);
                         break;
 
@@ -78,14 +78,14 @@ namespace Battleships
 
         static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
         {
-            //size = Convert.ToInt32(Console.ReadLine());
-            //string[,] _display = new string[size, size];
+            //size = Convert.ToInt32(Console.ReadLine());   //sets the gridsize to whatever the user inputs (in the settings)
+            //string[,] _display = new string[size, size];  //creates a new array called _display which draws the grid
             for (int x = 0; x < size; x++)
             {
 
                 for (int y = 0; y < size; y++)
                 {
-                    display[y, x] = " -";
+                    display[y, x] = " -";       //populates the array with " -", which acts as a placeholder for an "empty" co-ordiante
                     enemies[y, x] = " -";
                 }
             }
@@ -96,9 +96,9 @@ namespace Battleships
         {
             Console.Clear();
             Console.Write("  ");
-            for (int i = 0; i <= size - 1; i++)
+            for (int i = 0; i <= size - 1; i++)     //this for loop places the corrosponding letter above the correct column
             {
-                const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";        //the code below grabs a letter from this string which is the alphabet
 
                 var value = "";
 
@@ -137,16 +137,16 @@ namespace Battleships
                 for (int a = 1; a <= ship_nums[length - 2]; a++)
                 {
 
-                    int[,] temp = new int[2, 5];
+                    int[,] temp = new int[2, 5];        //this creates a temporary array to hold the co-ordiantes of the ships 
                     Boolean ship_placed = false;
 
                     while (ship_placed == false)
                     {
-                        Random rnd = new Random();
+                        Random rnd = new Random();      //the program generates two co-ordinates between 0 and the size of the grid (e.g. 10) and then chooses a random direction detween 1 and 4
                         int x = rnd.Next(size);
                         int y = rnd.Next(size);
                         int dir = rnd.Next(1, 5);
-                        for (int i = 0; i <= length - 1; i++)
+                        for (int i = 0; i <= length - 1; i++)   //then, for the length of the ship, 
                         {
 
                             switch (dir)
@@ -203,7 +203,7 @@ namespace Battleships
         static void Attack(int size, ref string[,] enemies, ref string[,] display)
         {
             Console.WriteLine("Enter coordinate (e.g. 3E)");
-            Console.WriteLine();
+            Console.WriteLine(); //the user enters their co-ordinates 
             string coord = Console.ReadLine();
 
             int y = Convert.ToInt32(Convert.ToString(coord[0])) - 1;
