@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Battleships
 {
@@ -15,22 +16,21 @@ namespace Battleships
             while (true)
             {
 
-                int size = 10;
+                int size = Convert.ToInt32(Console.ReadLine());
                 int[] ship_nums = new int[4];
                 ship_nums[0] = 1;
                 ship_nums[1] = 2;
                 ship_nums[2] = 1;
                 ship_nums[3] = 1;
-                string[,] display = new string[10, 10];
-                string[,] enemies = new string[10, 10];
+                string[,] display = new string[size,size];
+
+                string[,] enemies = new string[size, size];
 
                 Grid_Size(ref size, ref display, ref enemies);
-                
-                //Select_Ships(size, ref ship_nums);
-                Place_Enemies(size, enemies, ship_nums);
+                Place_Enemies(size, ref enemies, ship_nums);
                 Display(size, display);
-                Attack(size);
-                Console.ReadLine();
+                //Attack(size, ref enemies, ref display);
+                //Console.ReadLine();
             }
             //dev
 
@@ -78,24 +78,23 @@ namespace Battleships
 
         static void Grid_Size(ref int size, ref string[,] display, ref string[,] enemies)
         {
-            size = Convert.ToInt32(Console.ReadLine());
-            string[,] _display = new string[size, size];
+            //size = Convert.ToInt32(Console.ReadLine());
+            //string[,] _display = new string[size, size];
             for (int x = 0; x < size; x++)
             {
 
                 for (int y = 0; y < size; y++)
                 {
-                    _display[y, x] = " -";
+                    display[y, x] = " -";
+                    enemies[y, x] = " -";
                 }
             }
-            display = _display;
-            enemies = _display;
+
         }
         //set grid size
         static void Display(int size, string[,] display)
         {
-
-
+            Console.Clear();
             Console.Write("  ");
             for (int i = 0; i <= size - 1; i++)
             {
@@ -131,7 +130,7 @@ namespace Battleships
         }
         //display grid
 
-        static void Place_Enemies(int size, string[,] enemies, int[] ship_nums)
+        static void Place_Enemies(int size, ref string[,] enemies, int[] ship_nums)
         {
             for (int length = 2; length <= 5; length++)
             {
@@ -201,44 +200,29 @@ namespace Battleships
         }
         //place enemies
 
-        static void Attack(int size)
+        static void Attack(int size, ref string[,] enemies, ref string[,] display)
         {
             Console.WriteLine("Enter coordinate (e.g. 3E)");
             Console.WriteLine();
             string coord = Console.ReadLine();
-            int y = coord[0];
-            int x = (int)coord[1] % 32;
-            if ((x>0 && x < size) && (y>0 && y<size))
+
+            int y = Convert.ToInt32(Convert.ToString(coord[0])) - 1;
+            int x = ((int)coord[1] % 32) - 1;
+            if ((x > 0 && x < size) && (y > 0 && y < size))
             {
-                Console.WriteLine("test");
-            } else
+                if (enemies[y, x] == " #")
+                {
+                    Console.WriteLine("HIT!");
+                    enemies[y, x] = " X";
+                    display[y, x] = " X";
+
+                }
+            }
+            else
             {
                 Console.WriteLine("Invalid Coordinte");
             }
         }
         //attack
-
-        static void Select_Ships(int size, ref int[] ship_nums)
-        {
-            Boolean exit = false;
-            double ships = Math.Ceiling(((double)size / 5) * 3);
-
-            while (exit == false)
-            {
-                for (int i = 2; i < 6; i++)
-                {
-                    //Console.Clear();
-                    Console.WriteLine("Ships left - " + ships);
-                    Console.Write(i + " long - ");
-                    ship_nums[i - 2] = Convert.ToInt32(Console.ReadLine());
-                    ships = ships - ship_nums[i - 2];
-                    for (int a = 0; a < 3; a++)
-                    {
-                        Console.WriteLine(ship_nums[a]);
-                    }
-                }
-            }
-        }
-        //select ships
     }
 }
