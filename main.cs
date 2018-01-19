@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+Console.WriteLine("Your ship has been damaged and your radar cannot tell when you sink a ship, try and sink the enemy fleet, good luck!");
+                        Thread.Sleep(3000);
+
+
 namespace Battleships
 {
     class Program
