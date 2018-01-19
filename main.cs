@@ -5,10 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-Console.WriteLine("Your ship has been damaged and your radar cannot tell when you sink a ship, try and sink the enemy fleet, good luck!");
-                        Thread.Sleep(3000);
-
-
 namespace Battleships
 {
     class Program
@@ -16,75 +12,20 @@ namespace Battleships
 
         static void Main(string[] args)
         {
-            //dev
-            while (true)
-            {
+           
 
-                int size = Convert.ToInt32(Console.ReadLine());
-                int[] ship_nums = new int[4];
-                ship_nums[0] = 1;
-                ship_nums[1] = 2;
-                ship_nums[2] = 1;
-                ship_nums[3] = 1;
-                string[,] display = new string[size, size];
+            Boolean win = false;
+            int size = 10;
+            int[] ship_nums = new int[4];
+            ship_nums[0] = 1;
+            ship_nums[1] = 2;
+            ship_nums[2] = 1;
+            ship_nums[3] = 1;
+            string[,] display = new string[size, size];
 
-                string[,] enemies = new string[size, size];
+            string[,] enemies = new string[size, size];
 
-                int health = 17;
-
-                Grid_Size(ref size, ref display, ref enemies);
-                Place_Enemies(size, ref enemies, ship_nums);
-                for (int x = 0; x < size; x++)
-                {
-                    if ((x + 1) < 10)
-                    {
-                        Console.Write(" " + (x + 1));
-                    }
-                    else
-                    {
-                        Console.Write(x + 1);
-                    }
-                    for (int y = 0; y < size; y++)
-                    {
-                        if (enemies[y, x] == " -")
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        }
-                        else if (enemies[y, x] == " X")
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
-                        else if (enemies[y, x] == " O")
-                        {
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                        }
-                        else if (enemies[y, x] == " #")
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                        }
-                        Console.Write(enemies[y, x]);
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                    }
-                    Console.WriteLine();
-                }
-                Console.ReadLine();
-                while (true)
-                {
-                    Display(size, display);
-                    Attack(size, ref enemies, ref display);
-
-                    if (health == 0)
-                    {
-                        //Console.Clear();
-                        Console.WriteLine();
-                        Console.WriteLine("WIN!");
-                    }
-                }
-                //Console.ReadLine();
-            }
-            //dev
-
-
+            int health = 17;
             while (true)
             {           //this is the main menu that allows the user to select the different types of games
                 int choice;
@@ -102,6 +43,27 @@ namespace Battleships
                     case 1:
                         Console.Clear();
                         //goto guessing practice        //when the user selects the first option, the guessing practice subroutine will be called
+
+                        win = false;
+                        Grid_Size(ref size, ref display, ref enemies);
+                        Place_Enemies(size, ref enemies, ship_nums);
+                        Console.WriteLine("Your ship has been damaged and your radar cannot tell when you sink a ship, try and sink the enemy fleet, good luck!");
+                        Thread.Sleep(6000);
+                        while (win == false)
+                        {
+                            Display(size, display);
+                            Attack(size, ref enemies, ref display, ref health);
+
+                            if (health == 0)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("You sunk the enemy fleet!");
+                                Thread.Sleep(3000);
+                                Console.Clear();
+                                win = true;
+
+                            }
+                        }
                         break;
                     case 2:
                         Console.Clear();
@@ -114,6 +76,8 @@ namespace Battleships
                     case 4:
                         Console.Clear();
                         //goto settings     //when the user selects the fourth option, the setting subroutine will be called, which will allow the user to change the parameters of the game
+                        size = Convert.ToInt32(Console.ReadLine());
+                        Grid_Size(ref size, ref display, ref enemies);
                         break;
                     case 5:
                         Console.Clear();
@@ -144,7 +108,7 @@ namespace Battleships
         //set grid size
         static void Display(int size, string[,] display)
         {
-            //Console.Clear();
+            Console.Clear();
             Console.Write("  ");
             for (int i = 0; i <= size - 1; i++)     //this for loop places the corrosponding letter above the correct column
             {
@@ -176,10 +140,12 @@ namespace Battleships
                     if (display[y, x] == " -")
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    } else if (display[y, x] == " X")
+                    }
+                    else if (display[y, x] == " X")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                    } else if (display[y, x] == " O")
+                    }
+                    else if (display[y, x] == " O")
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
                     }
@@ -265,10 +231,10 @@ namespace Battleships
         }
         //place enemies
 
-        static void Attack(int size, ref string[,] enemies, ref string[,] display)
+        static void Attack(int size, ref string[,] enemies, ref string[,] display, ref int health)
         {
             Console.WriteLine();
-            Console.WriteLine("Enter coordinate (e.g. 3E)");
+            Console.WriteLine("Enter coordinate (e.g. 3E) - " + health);
             Console.WriteLine(); //the user enters their co-ordinates 
             string coord = Console.ReadLine();
             if (coord.Length >= 2)
@@ -311,22 +277,24 @@ namespace Battleships
 
                 if ((x >= 0 && x <= size) && (y >= 0 && y <= size))
                 {
-                    if (enemies[x, y] == " #")
+                    if  (enemies[x, y] == " X" || enemies[x, y] == " O")
                     {
-                        Console.WriteLine("HIT!");
-                        enemies[x, y] = " X";
-                        display[x, y] = " X";
+
+                        Console.WriteLine("Invalid Coordinte - Coordinate already attacked");
 
                     }
-                    else if (enemies[y, x] == " -")
+                    else if (enemies[x, y] == " -")
                     {
                         Console.WriteLine("MISS!");
                         enemies[x, y] = " O";
                         display[x, y] = " O";
                     }
-                    else if (enemies[x, y] == " X" || enemies[x, y] == " O")
+                    else if (enemies[x, y] == " #")
                     {
-                        Console.WriteLine("Invalid Coordinte - Coordinate already attacked");
+                        Console.WriteLine("HIT!");
+                        enemies[x, y] = " X";
+                        display[x, y] = " X";
+                        health = health - 1;
                     }
                     else
                     {
