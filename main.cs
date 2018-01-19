@@ -22,14 +22,60 @@ namespace Battleships
                 ship_nums[1] = 2;
                 ship_nums[2] = 1;
                 ship_nums[3] = 1;
-                string[,] display = new string[size,size];
+                string[,] display = new string[size, size];
 
                 string[,] enemies = new string[size, size];
 
+                int health = 17;
+
                 Grid_Size(ref size, ref display, ref enemies);
                 Place_Enemies(size, ref enemies, ship_nums);
-                Display(size, display);
-                //Attack(size, ref enemies, ref display);
+                for (int x = 0; x < size; x++)
+                {
+                    if ((x + 1) < 10)
+                    {
+                        Console.Write(" " + (x + 1));
+                    }
+                    else
+                    {
+                        Console.Write(x + 1);
+                    }
+                    for (int y = 0; y < size; y++)
+                    {
+                        if (enemies[y, x] == " -")
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        }
+                        else if (enemies[y, x] == " X")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                        else if (enemies[y, x] == " O")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                        }
+                        else if (enemies[y, x] == " #")
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+                        Console.Write(enemies[y, x]);
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
+                    Console.WriteLine();
+                }
+                Console.ReadLine();
+                while (true)
+                {
+                    Display(size, display);
+                    Attack(size, ref enemies, ref display);
+
+                    if (health == 0)
+                    {
+                        //Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("WIN!");
+                    }
+                }
                 //Console.ReadLine();
             }
             //dev
@@ -94,7 +140,7 @@ namespace Battleships
         //set grid size
         static void Display(int size, string[,] display)
         {
-            Console.Clear();
+            //Console.Clear();
             Console.Write("  ");
             for (int i = 0; i <= size - 1; i++)     //this for loop places the corrosponding letter above the correct column
             {
@@ -123,7 +169,22 @@ namespace Battleships
                 }
                 for (int y = 0; y < size; y++)
                 {
+                    if (display[y, x] == " -")
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    } else if (display[y, x] == " X")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    } else if (display[y, x] == " O")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    else if (display[y, x] == " #")
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                    }
                     Console.Write(display[y, x]);
+                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
                 Console.WriteLine();
             }
@@ -202,25 +263,78 @@ namespace Battleships
 
         static void Attack(int size, ref string[,] enemies, ref string[,] display)
         {
+            Console.WriteLine();
             Console.WriteLine("Enter coordinate (e.g. 3E)");
             Console.WriteLine(); //the user enters their co-ordinates 
             string coord = Console.ReadLine();
-
-            int y = Convert.ToInt32(Convert.ToString(coord[0])) - 1;
-            int x = ((int)coord[1] % 32) - 1;
-            if ((x > 0 && x < size) && (y > 0 && y < size))
+            if (coord.Length >= 2)
             {
-                if (enemies[y, x] == " #")
+                char _1 = coord[0];
+                char _2 = coord[1];
+                char _3 = ' ';
+                if (coord.Length == 3)
                 {
-                    Console.WriteLine("HIT!");
-                    enemies[y, x] = " X";
-                    display[y, x] = " X";
+                    _3 = coord[2];
+                }
+                int x = -1, y = -1;
+                if ((char.IsDigit(_1) == true && char.IsLetter(_2) == true) && char.IsLetter(_3) == false)
+                {
+                    x = ((int)_2 % 32) - 1;
+                    y = Convert.ToInt32(Convert.ToString(_1)) - 1;
+                }
+                else if ((char.IsDigit(_2) == true && char.IsLetter(_1) == true) && char.IsDigit(_3) == false)
+                {
+                    x = ((int)_1 % 32) - 1;
+                    y = Convert.ToInt32(Convert.ToString(_2)) - 1;
 
                 }
-            }
-            else
-            {
-                Console.WriteLine("Invalid Coordinte");
+                else if (((char.IsDigit(_1) == true && char.IsDigit(_2) == true) && char.IsLetter(_3) == true))
+                {
+                    x = ((int)_3 % 32) - 1;
+                    y = Convert.ToInt32(Convert.ToString(_1) + Convert.ToString(_2)) - 1;
+                    Console.WriteLine(y);
+                }
+                else if (((char.IsDigit(_2) == true && char.IsDigit(_3) == true) && char.IsLetter(_1) == true))
+                {
+                    x = ((int)_1 % 32) - 1;
+                    y = Convert.ToInt32(Convert.ToString(_2) + Convert.ToString(_3)) - 1;
+                    Console.WriteLine(y);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Coordinte - Incorrect format");
+                }
+
+                if ((x >= 0 && x <= size) && (y >= 0 && y <= size))
+                {
+                    if (enemies[x, y] == " #")
+                    {
+                        Console.WriteLine("HIT!");
+                        enemies[x, y] = " X";
+                        display[x, y] = " X";
+
+                    }
+                    else if (enemies[y, x] == " -")
+                    {
+                        Console.WriteLine("MISS!");
+                        enemies[x, y] = " O";
+                        display[x, y] = " O";
+                    }
+                    else if (enemies[x, y] == " X" || enemies[x, y] == " O")
+                    {
+                        Console.WriteLine("Invalid Coordinte - Coordinate already attacked");
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERROR");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Coordinte - Not within bounds");
+                }
+
+                Thread.Sleep(800);
             }
         }
         //attack
