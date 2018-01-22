@@ -16,18 +16,20 @@ namespace Battleships
 
             Boolean win = false;
             int size = 10;
+            int turns;
+            int turns_temp = 25;
             int[] ship_nums = new int[4];
             ship_nums[0] = 1;
             ship_nums[1] = 2;
             ship_nums[2] = 1;
             ship_nums[3] = 1;
-            string[,] display = new string[size, size];
-
-            string[,] enemies = new string[size, size];
 
             int health = 17;
             while (true)
             {           //this is the main menu that allows the user to select the different types of games
+                string[,] display = new string[size, size];
+
+                string[,] enemies = new string[size, size];
                 int choice;
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("1. Guessing Practice");
@@ -45,14 +47,17 @@ namespace Battleships
                         //goto guessing practice        //when the user selects the first option, the guessing practice subroutine will be called
 
                         win = false;
+                        turns = turns_temp;
                         Grid_Size(ref size, ref display, ref enemies);
                         Place_Enemies(size, ref enemies, ship_nums);
                         Console.WriteLine("Your ship has been damaged and your radar cannot tell when you sink a ship, try and sink the enemy fleet, good luck!");
-                        Thread.Sleep(6000);
+                      
+
+                        Console.ReadLine();
                         while (win == false)
                         {
                             Display(size, display);
-                            Attack(size, ref enemies, ref display, ref health);
+                            Attack(size, ref enemies, ref display, ref health, ref turns);
 
                             if (health == 0)
                             {
@@ -76,8 +81,35 @@ namespace Battleships
                     case 4:
                         Console.Clear();
                         //goto settings     //when the user selects the fourth option, the setting subroutine will be called, which will allow the user to change the parameters of the game
-                        size = Convert.ToInt32(Console.ReadLine());
-                        Grid_Size(ref size, ref display, ref enemies);
+                        Boolean settings = false;
+                        while (settings == false)
+                        {
+                            Console.WriteLine("Enter Grid Size between 5 and 27");
+                            size = Convert.ToInt32(Console.ReadLine());
+                            if (size <= 5 || size >= 27)
+                            {
+                                Console.WriteLine("Invalid Size");
+                            } else
+                            {
+                                settings = true;
+                            }
+                        }
+                        settings = false;
+                        while (settings == false)
+                        {
+                            Console.WriteLine("Enter max number of turns");
+                            turns = Convert.ToInt32(Console.ReadLine());
+                            if (size <= 0)
+                            {
+                                Console.WriteLine("Invalid number");
+                            }
+                            else
+                            {
+                                settings = true;
+                            }
+                        }
+
+                        
                         break;
                     case 5:
                         Console.Clear();
@@ -231,10 +263,12 @@ namespace Battleships
         }
         //place enemies
 
-        static void Attack(int size, ref string[,] enemies, ref string[,] display, ref int health)
+        static void Attack(int size, ref string[,] enemies, ref string[,] display, ref int health, ref int turns)
         {
             Console.WriteLine();
-            Console.WriteLine("Enter coordinate (e.g. 3E) - " + health);
+            Console.WriteLine("Turns left: " + turns);
+            Console.WriteLine();
+            Console.WriteLine("Enter coordinate (e.g. 3E)");
             Console.WriteLine(); //the user enters their co-ordinates 
             string coord = Console.ReadLine();
             if (coord.Length >= 2)
@@ -288,6 +322,7 @@ namespace Battleships
                         Console.WriteLine("MISS!");
                         enemies[x, y] = " O";
                         display[x, y] = " O";
+                        turns -= 1;
                     }
                     else if (enemies[x, y] == " #")
                     {
@@ -295,6 +330,8 @@ namespace Battleships
                         enemies[x, y] = " X";
                         display[x, y] = " X";
                         health = health - 1;
+                        turns += 3;
+                        
                     }
                     else
                     {
@@ -312,3 +349,5 @@ namespace Battleships
         //attack
     }
 }
+
+
