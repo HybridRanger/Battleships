@@ -148,9 +148,11 @@ namespace Battleships
 
                 var value = "";
 
-                if (i >= letters.Length)
+                if (i >= letters.Length) 
+                {
                     value += letters[i / letters.Length - 1];
-
+                }
+                
                 value += letters[i % letters.Length];
 
                 Console.Write(" " + value);
